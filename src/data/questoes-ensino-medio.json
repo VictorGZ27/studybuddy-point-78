@@ -1,0 +1,664 @@
+{
+  "materias": [
+    {
+      "nome": "Português",
+      "questoes": [
+        {
+          "pergunta": "Qual figura de linguagem está presente na frase 'Seus olhos são duas estrelas brilhantes'?",
+          "alternativas": ["A) Metáfora", "B) Metonímia", "C) Hipérbole", "D) Ironia"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Em que pessoa do discurso está narrado o trecho: 'Caminhei pela rua deserta, observando as casas antigas'?",
+          "alternativas": ["A) Primeira pessoa", "B) Segunda pessoa", "C) Terceira pessoa", "D) Discurso indireto"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Qual é a função sintática do termo sublinhado em 'O livro foi lido pelos estudantes'?",
+          "alternativas": ["A) Sujeito", "B) Objeto direto", "C) Agente da passiva", "D) Adjunto adverbial"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O Romantismo brasileiro teve início com a publicação de qual obra?",
+          "alternativas": ["A) O Guarani", "B) Suspiros Poéticos e Saudades", "C) A Moreninha", "D) Iracema"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual das alternativas apresenta um período composto por coordenação?",
+          "alternativas": ["A) Quando chegou, todos se calaram", "B) Estudou muito, mas não passou", "C) O livro que comprei é interessante", "D) Espero que você venha"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Em 'Machado de Assis escreveu Dom Casmurro', qual é a voz verbal?",
+          "alternativas": ["A) Voz ativa", "B) Voz passiva", "C) Voz reflexiva", "D) Voz recíproca"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Qual característica NÃO pertence ao Realismo?",
+          "alternativas": ["A) Objetividade", "B) Idealização da realidade", "C) Análise psicológica", "D) Crítica social"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Na oração 'Choveu ontem', o sujeito é:",
+          "alternativas": ["A) Oculto", "B) Simples", "C) Composto", "D) Inexistente"],
+          "correta": "D"
+        },
+        {
+          "pergunta": "Qual figura de linguagem ocorre em 'A cidade inteira veio ao evento'?",
+          "alternativas": ["A) Hipérbole", "B) Metonímia", "C) Prosopopeia", "D) Antítese"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O Modernismo no Brasil começou com:",
+          "alternativas": ["A) Semana de Arte Moderna de 1922", "B) Publicação de O Cortiço", "C) Fundação da Academia Brasileira de Letras", "D) Morte de Machado de Assis"],
+          "correta": "A"
+        }
+      ]
+    },
+    {
+      "nome": "Matemática",
+      "questoes": [
+        {
+          "pergunta": "Qual é o valor de x na equação 2x + 5 = 15?",
+          "alternativas": ["A) 5", "B) 10", "C) 7", "D) 3"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "O perímetro de um retângulo de base 8 cm e altura 6 cm é:",
+          "alternativas": ["A) 14 cm", "B) 28 cm", "C) 48 cm", "D) 24 cm"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual é o valor de sen(90°)?",
+          "alternativas": ["A) 0", "B) 1", "C) -1", "D) √2/2"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A função f(x) = 2x + 3 é classificada como:",
+          "alternativas": ["A) Quadrática", "B) Exponencial", "C) Linear", "D) Logarítmica"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O conjunto solução da inequação x - 3 > 5 é:",
+          "alternativas": ["A) x > 8", "B) x < 8", "C) x > 2", "D) x < 2"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Quantas faces tem um cubo?",
+          "alternativas": ["A) 4", "B) 6", "C) 8", "D) 12"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O valor de log₂(8) é:",
+          "alternativas": ["A) 2", "B) 3", "C) 4", "D) 8"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A derivada de f(x) = x² é:",
+          "alternativas": ["A) x", "B) 2x", "C) x²", "D) 2"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual é a medida da hipotenusa de um triângulo retângulo com catetos 3 e 4?",
+          "alternativas": ["A) 5", "B) 7", "C) 6", "D) 8"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "A área de um círculo com raio 3 cm é:",
+          "alternativas": ["A) 6π cm²", "B) 9π cm²", "C) 3π cm²", "D) 18π cm²"],
+          "correta": "B"
+        }
+      ]
+    },
+    {
+      "nome": "História",
+      "questoes": [
+        {
+          "pergunta": "A Revolução Francesa começou em que ano?",
+          "alternativas": ["A) 1789", "B) 1792", "C) 1799", "D) 1804"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Qual foi o primeiro presidente do Brasil?",
+          "alternativas": ["A) Getúlio Vargas", "B) Deodoro da Fonseca", "C) Floriano Peixoto", "D) Prudente de Morais"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A Segunda Guerra Mundial terminou em:",
+          "alternativas": ["A) 1944", "B) 1945", "C) 1946", "D) 1947"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O período conhecido como Era Vargas durou de:",
+          "alternativas": ["A) 1930-1945", "B) 1930-1954", "C) 1937-1945", "D) 1930-1964"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A Proclamação da República no Brasil ocorreu em:",
+          "alternativas": ["A) 15 de novembro de 1889", "B) 7 de setembro de 1822", "C) 13 de maio de 1888", "D) 15 de novembro de 1888"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Qual civilização construiu Machu Picchu?",
+          "alternativas": ["A) Asteca", "B) Maia", "C) Inca", "D) Olmeca"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "A Guerra Fria foi um conflito entre:",
+          "alternativas": ["A) EUA e Alemanha", "B) França e Inglaterra", "C) EUA e URSS", "D) China e Japão"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O Renascimento teve início em qual país?",
+          "alternativas": ["A) França", "B) Itália", "C) Alemanha", "D) Inglaterra"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A Lei Áurea foi assinada em:",
+          "alternativas": ["A) 1887", "B) 1888", "C) 1889", "D) 1890"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual evento marcou o início da Primeira Guerra Mundial?",
+          "alternativas": ["A) Invasão da Polônia", "B) Assassinato do Arquiduque Francisco Ferdinando", "C) Ataque a Pearl Harbor", "D) Revolução Russa"],
+          "correta": "B"
+        }
+      ]
+    },
+    {
+      "nome": "Geografia",
+      "questoes": [
+        {
+          "pergunta": "Qual é o maior oceano do mundo?",
+          "alternativas": ["A) Atlântico", "B) Índico", "C) Pacífico", "D) Ártico"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "A linha do Equador divide a Terra em:",
+          "alternativas": ["A) Hemisfério Norte e Sul", "B) Hemisfério Leste e Oeste", "C) Zonas climáticas", "D) Continentes"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Qual país tem a maior população mundial?",
+          "alternativas": ["A) Índia", "B) China", "C) Estados Unidos", "D) Brasil"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O clima tropical caracteriza-se por:",
+          "alternativas": ["A) Temperaturas baixas o ano todo", "B) Duas estações bem definidas: seca e chuvosa", "C) Neve constante", "D) Ausência de chuvas"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual é a capital da Austrália?",
+          "alternativas": ["A) Sydney", "B) Melbourne", "C) Canberra", "D) Perth"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "A cordilheira dos Andes localiza-se em qual continente?",
+          "alternativas": ["A) Ásia", "B) América do Norte", "C) América do Sul", "D) Europa"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O que são coordenadas geográficas?",
+          "alternativas": ["A) Apenas latitude", "B) Apenas longitude", "C) Latitude e longitude", "D) Altitude e profundidade"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "Qual bioma brasileiro é conhecido como 'berço das águas'?",
+          "alternativas": ["A) Amazônia", "B) Cerrado", "C) Caatinga", "D) Mata Atlântica"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A urbanização é:",
+          "alternativas": ["A) O crescimento das áreas rurais", "B) O crescimento das cidades", "C) A diminuição populacional", "D) A migração internacional"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual fenômeno climático provoca secas na região Nordeste do Brasil?",
+          "alternativas": ["A) El Niño", "B) La Niña", "C) Furacões", "D) Monções"],
+          "correta": "A"
+        }
+      ]
+    },
+    {
+      "nome": "Inglês",
+      "questoes": [
+        {
+          "pergunta": "What is the past tense of 'go'?",
+          "alternativas": ["A) goed", "B) went", "C) gone", "D) going"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Which sentence is correct?",
+          "alternativas": ["A) She don't like pizza", "B) She doesn't likes pizza", "C) She doesn't like pizza", "D) She not like pizza"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "What does 'biblioteca' mean in English?",
+          "alternativas": ["A) Bookstore", "B) Library", "C) School", "D) Museum"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Choose the correct comparative form: 'This book is _____ than that one.'",
+          "alternativas": ["A) more interesting", "B) most interesting", "C) interestinger", "D) interesting"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "What is the plural of 'child'?",
+          "alternativas": ["A) childs", "B) children", "C) childrens", "D) child's"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Which modal verb expresses possibility?",
+          "alternativas": ["A) must", "B) should", "C) might", "D) will"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "Complete the sentence: 'If it rains, I _____ stay home.'",
+          "alternativas": ["A) will", "B) would", "C) can", "D) must"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "What is the opposite of 'expensive'?",
+          "alternativas": ["A) costly", "B) cheap", "C) valuable", "D) priceless"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Which preposition completes the sentence: 'I'm interested _____ learning English'?",
+          "alternativas": ["A) on", "B) at", "C) in", "D) for"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "What is the correct question form for 'She lives in London'?",
+          "alternativas": ["A) Where does she live?", "B) Where she lives?", "C) Where do she live?", "D) Where live she?"],
+          "correta": "A"
+        }
+      ]
+    },
+    {
+      "nome": "Artes",
+      "questoes": [
+        {
+          "pergunta": "Quem pintou a obra 'Mona Lisa'?",
+          "alternativas": ["A) Michelangelo", "B) Leonardo da Vinci", "C) Rafael", "D) Donatello"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual movimento artístico caracterizou-se pela deformação da realidade?",
+          "alternativas": ["A) Realismo", "B) Impressionismo", "C) Expressionismo", "D) Neoclassicismo"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "As cores primárias são:",
+          "alternativas": ["A) Vermelho, azul e verde", "B) Vermelho, azul e amarelo", "C) Azul, amarelo e laranja", "D) Verde, roxo e amarelo"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Tarsila do Amaral foi uma importante artista do:",
+          "alternativas": ["A) Barroco brasileiro", "B) Romantismo", "C) Modernismo brasileiro", "D) Realismo"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O que caracteriza o estilo barroco?",
+          "alternativas": ["A) Simplicidade e equilíbrio", "B) Exagero e dramaticidade", "C) Geometria e matemática", "D) Naturalismo"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual técnica artística usa água como solvente?",
+          "alternativas": ["A) Óleo sobre tela", "B) Aquarela", "C) Acrílica", "D) Pastel seco"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Pablo Picasso foi um dos criadores de qual movimento artístico?",
+          "alternativas": ["A) Surrealismo", "B) Impressionismo", "C) Cubismo", "D) Dadaísmo"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "A técnica de 'claro-escuro' foi muito utilizada por:",
+          "alternativas": ["A) Van Gogh", "B) Monet", "C) Caravaggio", "D) Picasso"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "Qual período artístico valorizava a arte greco-romana?",
+          "alternativas": ["A) Gótico", "B) Renascimento", "C) Barroco", "D) Romântico"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que significa 'arte abstrata'?",
+          "alternativas": ["A) Arte que representa a realidade fielmente", "B) Arte que não representa objetos reconhecíveis", "C) Arte feita apenas com tinta", "D) Arte religiosa"],
+          "correta": "B"
+        }
+      ]
+    },
+    {
+      "nome": "Sociologia",
+      "questoes": [
+        {
+          "pergunta": "Quem é considerado o fundador da Sociologia?",
+          "alternativas": ["A) Karl Marx", "B) Max Weber", "C) Auguste Comte", "D) Émile Durkheim"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O que é estratificação social?",
+          "alternativas": ["A) Divisão da sociedade em camadas", "B) União de todas as classes", "C) Igualdade social", "D) Mobilidade geográfica"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Segundo Marx, a luta de classes ocorre entre:",
+          "alternativas": ["A) Ricos e pobres apenas", "B) Burguesia e proletariado", "C) Governo e povo", "D) Homens e mulheres"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que caracteriza uma sociedade industrial?",
+          "alternativas": ["A) Produção artesanal", "B) Agricultura de subsistência", "C) Produção mecanizada em massa", "D) Caça e pesca"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O que são instituições sociais?",
+          "alternativas": ["A) Apenas órgãos governamentais", "B) Estruturas organizadas que regulam a vida social", "C) Movimentos sociais", "D) Partidos políticos"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A socialização é:",
+          "alternativas": ["A) O processo de aprendizagem das normas sociais", "B) Viver apenas em grupos", "C) Isolamento social", "D) Competição social"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "O que Max Weber entende por 'ação social'?",
+          "alternativas": ["A) Qualquer movimento físico", "B) Ação orientada por outros indivíduos", "C) Apenas ações políticas", "D) Ações econômicas"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que é anomia segundo Durkheim?",
+          "alternativas": ["A) Excesso de regras sociais", "B) Ausência ou enfraquecimento das normas sociais", "C) Conflito de classes", "D) Progresso social"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A globalização caracteriza-se por:",
+          "alternativas": ["A) Isolamento dos países", "B) Integração mundial em diversos aspectos", "C) Apenas trocas comerciais", "D) Diminuição da comunicação"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que são movimentos sociais?",
+          "alternativas": ["A) Apenas protestos violentos", "B) Ações coletivas em busca de mudanças", "C) Partidos políticos", "D) Instituições governamentais"],
+          "correta": "B"
+        }
+      ]
+    },
+    {
+      "nome": "Filosofia",
+      "questoes": [
+        {
+          "pergunta": "Sócrates é famoso por qual frase?",
+          "alternativas": ["A) 'Penso, logo existo'", "B) 'Só sei que nada sei'", "C) 'O homem é a medida de todas as coisas'", "D) 'Tudo flui'"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual filósofo escreveu 'A República'?",
+          "alternativas": ["A) Aristóteles", "B) Sócrates", "C) Platão", "D) Heráclito"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O que estuda a Ética?",
+          "alternativas": ["A) A natureza física", "B) O comportamento moral", "C) As leis científicas", "D) A história antiga"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "René Descartes é considerado o pai de qual corrente filosófica?",
+          "alternativas": ["A) Empirismo", "B) Racionalismo", "C) Existencialismo", "D) Positivismo"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que significa 'filosofia' etimologicamente?",
+          "alternativas": ["A) Conhecimento absoluto", "B) Amor à sabedoria", "C) Estudo da natureza", "D) Pensamento crítico"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual filósofo desenvolveu o conceito de 'imperativo categórico'?",
+          "alternativas": ["A) Kant", "B) Hegel", "C) Nietzsche", "D) Schopenhauer"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "O Existencialismo enfatiza:",
+          "alternativas": ["A) A essência precede a existência", "B) A existência precede a essência", "C) Apenas o pensamento racional", "D) A vida após a morte"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual problema filosófico questiona a possibilidade do conhecimento?",
+          "alternativas": ["A) Problema ontológico", "B) Problema epistemológico", "C) Problema ético", "D) Problema estético"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Aristóteles classificou as formas de governo em quantos tipos?",
+          "alternativas": ["A) Dois", "B) Três", "C) Quatro", "D) Cinco"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que caracteriza o método socrático?",
+          "alternativas": ["A) Afirmações dogmáticas", "B) Perguntas que levam à reflexão", "C) Memorização de textos", "D) Experiências práticas"],
+          "correta": "B"
+        }
+      ]
+    },
+    {
+      "nome": "Biologia",
+      "questoes": [
+        {
+          "pergunta": "Qual é a unidade básica da vida?",
+          "alternativas": ["A) Átomo", "B) Molécula", "C) Célula", "D) Tecido"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "A fotossíntese ocorre em qual organela?",
+          "alternativas": ["A) Mitocôndria", "B) Núcleo", "C) Cloroplasto", "D) Ribossomo"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "Quantos cromossomos tem uma célula humana normal?",
+          "alternativas": ["A) 23", "B) 46", "C) 48", "D) 44"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual gás é liberado durante a fotossíntese?",
+          "alternativas": ["A) Dióxido de carbono", "B) Nitrogênio", "C) Oxigênio", "D) Hidrogênio"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "A teoria da evolução foi proposta por:",
+          "alternativas": ["A) Mendel", "B) Darwin", "C) Lamarck", "D) Watson"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "DNA significa:",
+          "alternativas": ["A) Ácido desoxirribonucleico", "B) Ácido ribonucleico", "C) Proteína nuclear", "D) Enzima celular"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Qual reino inclui os fungos?",
+          "alternativas": ["A) Plantae", "B) Animalia", "C) Fungi", "D) Protista"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "A respiração celular ocorre em qual organela?",
+          "alternativas": ["A) Cloroplasto", "B) Núcleo", "C) Mitocôndria", "D) Vacúolo"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "Qual é o nome do processo de divisão celular que produz gametas?",
+          "alternativas": ["A) Mitose", "B) Meiose", "C) Citocinese", "D) Interfase"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Os anticorpos são produzidos por quais células?",
+          "alternativas": ["A) Glóbulos vermelhos", "B) Linfócitos B", "C) Plaquetas", "D) Neurônios"],
+          "correta": "B"
+        }
+      ]
+    },
+    {
+      "nome": "Educação Física",
+      "questoes": [
+        {
+          "pergunta": "Quantos jogadores há em cada time de futebol em campo?",
+          "alternativas": ["A) 10", "B) 11", "C) 12", "D) 9"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual é a altura oficial da rede de voleibol masculino?",
+          "alternativas": ["A) 2,40m", "B) 2,43m", "C) 2,45m", "D) 2,50m"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "No basquete, quantos pontos vale um lance livre?",
+          "alternativas": ["A) 1 ponto", "B) 2 pontos", "C) 3 pontos", "D) 4 pontos"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Qual capacidade física está relacionada à manutenção de uma atividade por tempo prolongado?",
+          "alternativas": ["A) Força", "B) Velocidade", "C) Resistência", "D) Flexibilidade"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "No handebol, quantos jogadores cada equipe tem em quadra?",
+          "alternativas": ["A) 6", "B) 7", "C) 8", "D) 5"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual é o objetivo principal do aquecimento antes do exercício?",
+          "alternativas": ["A) Cansar o corpo", "B) Preparar o corpo para atividade", "C) Emagrecer", "D) Aumentar a massa muscular"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "No atletismo, qual prova NÃO é considerada de velocidade?",
+          "alternativas": ["A) 100 metros rasos", "B) 200 metros rasos", "C) 1500 metros", "D) 100 metros com barreiras"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "Qual nutriente é a principal fonte de energia para exercícios?",
+          "alternativas": ["A) Proteínas", "B) Gorduras", "C) Carboidratos", "D) Vitaminas"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "No tênis, o que significa 'ace'?",
+          "alternativas": ["A) Erro do adversário", "B) Saque direto sem toque do adversário", "C) Empate no jogo", "D) Ponto perdido"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual é a frequência cardíaca máxima aproximada para uma pessoa de 20 anos?",
+          "alternativas": ["A) 180 bpm", "B) 200 bpm", "C) 220 bpm", "D) 160 bpm"],
+          "correta": "B"
+        }
+      ]
+    },
+    {
+      "nome": "Química",
+      "questoes": [
+        {
+          "pergunta": "Qual é o símbolo químico do ouro?",
+          "alternativas": ["A) Go", "B) Au", "C) Ag", "D) Or"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A água tem fórmula química:",
+          "alternativas": ["A) H2O", "B) CO2", "C) O2", "D) H2SO4"],
+          "correta": "A"
+        },
+        {
+          "pergunta": "Quantos prótons tem o átomo de carbono?",
+          "alternativas": ["A) 4", "B) 6", "C) 8", "D) 12"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que acontece em uma reação de combustão?",
+          "alternativas": ["A) Absorção de oxigênio", "B) Liberação de energia e formação de produtos", "C) Apenas mudança de estado", "D) Separação de misturas"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual é o pH de uma solução neutra?",
+          "alternativas": ["A) 0", "B) 7", "C) 14", "D) 1"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A tabela periódica organiza os elementos por:",
+          "alternativas": ["A) Massa atômica apenas", "B) Número atômico", "C) Densidade", "D) Estado físico"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual gás é mais abundante na atmosfera terrestre?",
+          "alternativas": ["A) Oxigênio", "B) Dióxido de carbono", "C) Nitrogênio", "D) Argônio"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "O que caracteriza uma ligação iônica?",
+          "alternativas": ["A) Compartilhamento de elétrons", "B) Transferência de elétrons", "C) Força de van der Waals", "D) Ligação de hidrogênio"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Qual é a fórmula do ácido sulfúrico?",
+          "alternativas": ["A) HCl", "B) H2SO4", "C) HNO3", "D) CH3COOH"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "Em uma reação química, a lei da conservação das massas afirma que:",
+          "alternativas": ["A) A massa se perde", "B) A massa se cria", "C) A massa se conserva", "D) A massa varia aleatoriamente"],
+          "correta": "C"
+        }
+      ]
+    },
+    {
+      "nome": "Física",
+      "questoes": [
+        {
+          "pergunta": "Qual é a velocidade da luz no vácuo?",
+          "alternativas": ["A) 300.000 km/s", "B) 300.000.000 m/s", "C) 150.000 km/s", "D) 500.000 m/s"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A primeira Lei de Newton afirma que:",
+          "alternativas": ["A) F = ma", "B) Todo corpo em repouso tende a permanecer em repouso", "C) Ação e reação", "D) E = mc²"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A unidade de força no Sistema Internacional é:",
+          "alternativas": ["A) Joule", "B) Newton", "C) Watt", "D) Pascal"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que acontece com a energia em um sistema isolado?",
+          "alternativas": ["A) Se perde", "B) Se cria", "C) Se conserva", "D) Varia aleatoriamente"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "Qual grandeza física mede a quantidade de movimento?",
+          "alternativas": ["A) Velocidade", "B) Aceleração", "C) Momentum", "D) Energia"],
+          "correta": "C"
+        },
+        {
+          "pergunta": "A frequência e o período são grandezas:",
+          "alternativas": ["A) Diretamente proporcionais", "B) Inversamente proporcionais", "C) Independentes", "D) Iguais"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "O que caracteriza um movimento uniformemente acelerado?",
+          "alternativas": ["A) Velocidade constante", "B) Aceleração constante", "C) Força nula", "D) Trajetória circular"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A potência elétrica é calculada por:",
+          "alternativas": ["A) P = VI", "B) P = I²R", "C) P = V²/R", "D) Todas as anteriores"],
+          "correta": "D"
+        },
+        {
+          "pergunta": "Qual tipo de ondas são as ondas sonoras?",
+          "alternativas": ["A) Eletromagnéticas", "B) Mecânicas longitudinais", "C) Mecânicas transversais", "D) Ondas de luz"],
+          "correta": "B"
+        },
+        {
+          "pergunta": "A temperatura de 0°C corresponde a quantos Kelvin?",
+          "alternativas": ["A) 0 K", "B) 273 K", "C) -273 K", "D) 100 K"],
+          "correta": "B"
+        }
+      ]
+    }
+  ]
+}
