@@ -153,7 +153,23 @@ export default function Biblioteca() {
 
   useEffect(() => {
     console.log('🚀 useEffect executado - carregando resumos...');
-    loadResumos();
+    
+    // Safety timeout - if loading takes more than 10 seconds, show error
+    const timeoutId = setTimeout(() => {
+      console.log('⏰ Timeout atingido - forçando fim do loading');
+      if (loading) {
+        setLoading(false);
+        setError('Tempo limite excedido. Verifique sua conexão.');
+      }
+    }, 10000);
+    
+    loadResumos().finally(() => {
+      clearTimeout(timeoutId);
+    });
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const loadResumos = async () => {
@@ -187,27 +203,37 @@ export default function Biblioteca() {
 
   const loadResumosBySubject = async (materia: string) => {
     try {
+      console.log('🔍 Carregando resumos por matéria:', materia);
       setLoading(true);
       setError(null);
+      
       const { data, error } = await supabase
         .from('resumos')
         .select('*')
         .eq('materia', materia)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      console.log('📊 Resposta filtrada do Supabase:', { data, error });
 
+      if (error) {
+        console.error('❌ Erro ao filtrar resumos:', error);
+        throw error;
+      }
+
+      console.log('✅ Resumos filtrados carregados:', data?.length || 0, 'items');
       setResumos(data || []);
       setSelectedSubject(materia);
     } catch (error: any) {
-      console.error('Erro ao carregar resumos:', error);
+      console.error('💥 Erro ao carregar resumos filtrados:', error);
       setError('Erro ao carregar dados, tente novamente');
     } finally {
+      console.log('🏁 Finalizando carregamento filtrado...');
       setLoading(false);
     }
   };
 
   const resetFilter = () => {
+    console.log('🔄 Resetando filtro...');
     setSelectedSubject(null);
     loadResumos();
   };

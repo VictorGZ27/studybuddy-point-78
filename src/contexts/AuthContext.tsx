@@ -35,47 +35,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Obter sessão inicial
+    let mounted = true;
+
+    // Set up auth state listener FIRST
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!mounted) return;
+      
+      console.log('🔐 Auth state changed:', event, !!session);
+      
+      // Only synchronous state updates here
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      // Defer async operations to prevent deadlock
+      if (session?.user) {
+        setTimeout(() => {
+          if (mounted) {
+            loadProfile(session.user.id).finally(() => {
+              if (mounted) setLoading(false);
+            });
+          }
+        }, 0);
+      } else {
+        setProfile(null);
+        if (mounted) setLoading(false);
+      }
+    });
+
+    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (!mounted) return;
+      
       if (error) {
-        console.error('Error getting session:', error)
-        setLoading(false)
-        return
+        console.error('Error getting session:', error);
+        setLoading(false);
+        return;
       }
       
-      setSession(session)
-      setUser(session?.user ?? null)
+      console.log('🔐 Initial session:', !!session);
+      
+      setSession(session);
+      setUser(session?.user ?? null);
       
       if (session?.user) {
         loadProfile(session.user.id).finally(() => {
-          setLoading(false)
-        })
+          if (mounted) setLoading(false);
+        });
       } else {
-        setLoading(false)
+        setLoading(false);
       }
-    })
+    });
 
-    // Escutar mudanças de autenticação
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      
-      if (session?.user) {
-        await loadProfile(session.user.id)
-      } else {
-        setProfile(null)
-      }
-      
-      setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const loadProfile = async (userId: string) => {
     try {
+      console.log('👤 Loading profile for user:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -83,9 +104,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .maybeSingle()
 
       if (error) {
+        console.error('❌ Error loading profile:', error);
         throw error
       }
 
+      console.log('✅ Profile loaded:', data);
       setProfile(data as Profile)
     } catch (error) {
       console.error('Erro ao carregar perfil:', error)
