@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle, Send, Image, Clock, CheckCircle2, Camera, Paperclip } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const availableTeachers = [
   {
@@ -80,10 +83,132 @@ const quickQuestions = [
   "Qual a diferença entre X e Y?"
 ];
 
+interface ChatMessage {
+  id: string;
+  message: string;
+  created_at: string;
+  isFromUser: boolean;
+  professor_name?: string;
+}
+
 export default function Chat() {
   const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [activeTab, setActiveTab] = useState<"available" | "chats">("available");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
+
+  // Load messages when teacher is selected
+  useEffect(() => {
+    if (selectedTeacher) {
+      loadMessages();
+      // Initialize with a welcome message
+      setMessages([
+        {
+          id: 'welcome',
+          message: 'Olá! Como posso te ajudar hoje?',
+          created_at: new Date().toISOString(),
+          isFromUser: false,
+          professor_name: selectedTeacher
+        }
+      ]);
+    } else {
+      setMessages([]);
+    }
+  }, [selectedTeacher]);
+
+  // Scroll to bottom when new messages arrive
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const loadMessages = async () => {
+    if (!user || !selectedTeacher) return;
+
+    try {
+      const professorData = availableTeachers.find(t => t.name === selectedTeacher);
+      if (!professorData) return;
+
+      // For now, we'll simulate loading messages
+      // In a real app, you'd query the chat table with professor and user IDs
+    } catch (error) {
+      console.error('Error loading messages:', error);
+    }
+  };
+
+  const sendMessage = async () => {
+    if (!message.trim() || !user || !selectedTeacher) return;
+
+    const messageText = message.trim();
+    setMessage("");
+    setLoading(true);
+
+    try {
+      // Add user message immediately
+      const userMessage: ChatMessage = {
+        id: Date.now().toString(),
+        message: messageText,
+        created_at: new Date().toISOString(),
+        isFromUser: true
+      };
+
+      setMessages(prev => [...prev, userMessage]);
+
+      // Save to Supabase (you would need to find the professor ID)
+      // For now, we'll just simulate saving the message
+      
+      // Simulate teacher response after a delay
+      setTimeout(() => {
+        const teacherResponse: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          message: getTeacherResponse(messageText),
+          created_at: new Date().toISOString(),
+          isFromUser: false,
+          professor_name: selectedTeacher
+        };
+        setMessages(prev => [...prev, teacherResponse]);
+      }, 1500);
+
+      toast.success("Mensagem enviada!");
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast.error("Erro ao enviar mensagem");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getTeacherResponse = (userMessage: string): string => {
+    const responses = [
+      "Interessante pergunta! Vou explicar passo a passo...",
+      "Claro! Essa é uma dúvida comum. Vamos ver...",
+      "Perfeita pergunta! Para entender melhor, precisamos analisar...",
+      "Ótima questão! Vou te ajudar a resolver isso...",
+      "Entendo sua dúvida. Vamos trabalhar juntos nisso...",
+      "Essa é uma pergunta importante! Deixe me explicar..."
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const formatTime = (timestamp: string) => {
+    return new Date(timestamp).toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   return (
     <div className="min-h-screen pt-20 pb-8">
@@ -260,40 +385,52 @@ export default function Chat() {
                 {/* Chat Messages */}
                 <CardContent className="flex-1 p-6 overflow-y-auto">
                   <div className="space-y-4">
-                    {/* Sample messages */}
-                    <div className="flex items-start space-x-3">
-                      <Avatar className="w-8 h-8">
-                        <AvatarFallback className="text-xs">
-                          {selectedTeacher.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="bg-secondary rounded-lg p-3 max-w-xs">
-                        <p className="text-sm">Olá! Como posso te ajudar hoje?</p>
-                        <span className="text-xs text-muted-foreground">14:30</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start space-x-3 justify-end">
-                      <div className="hero-gradient text-white rounded-lg p-3 max-w-xs">
-                        <p className="text-sm">Tenho dúvida sobre funções quadráticas</p>
-                        <div className="flex items-center justify-end mt-1">
-                          <span className="text-xs text-white/80 mr-1">14:32</span>
-                          <CheckCircle2 className="w-3 h-3" />
+                    {messages.map((msg) => (
+                      <div key={msg.id} className={`flex items-start space-x-3 ${msg.isFromUser ? 'justify-end' : ''}`}>
+                        {!msg.isFromUser && (
+                          <Avatar className="w-8 h-8">
+                            <AvatarFallback className="text-xs">
+                              {selectedTeacher?.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
+                        
+                        <div className={`rounded-lg p-3 max-w-xs lg:max-w-md ${
+                          msg.isFromUser 
+                            ? 'hero-gradient text-white' 
+                            : 'bg-secondary'
+                        }`}>
+                          <p className="text-sm">{msg.message}</p>
+                          <div className={`flex items-center mt-1 ${
+                            msg.isFromUser ? 'justify-end' : 'justify-start'
+                          }`}>
+                            <span className={`text-xs ${
+                              msg.isFromUser ? 'text-white/80' : 'text-muted-foreground'
+                            }`}>
+                              {formatTime(msg.created_at)}
+                            </span>
+                            {msg.isFromUser && (
+                              <CheckCircle2 className="w-3 h-3 ml-1" />
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-
-                    <div className="flex items-start space-x-3">
-                      <Avatar className="w-8 h-8">
-                        <AvatarFallback className="text-xs">
-                          {selectedTeacher.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="bg-secondary rounded-lg p-3 max-w-xs">
-                        <p className="text-sm">Claro! Qual parte específica está te causando dificuldade?</p>
-                        <span className="text-xs text-muted-foreground">14:33</span>
+                    ))}
+                    
+                    {loading && (
+                      <div className="flex items-start space-x-3">
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className="text-xs">
+                            {selectedTeacher?.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="bg-secondary rounded-lg p-3">
+                          <p className="text-sm text-muted-foreground">Digitando...</p>
+                        </div>
                       </div>
-                    </div>
+                    )}
+                    
+                    <div ref={messagesEndRef} />
                   </div>
                 </CardContent>
 
@@ -321,8 +458,10 @@ export default function Chat() {
                         placeholder="Digite sua dúvida aqui..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
+                        onKeyPress={handleKeyPress}
                         rows={2}
                         className="resize-none"
+                        disabled={loading}
                       />
                     </div>
                     <div className="flex flex-col space-y-1">
@@ -332,7 +471,12 @@ export default function Chat() {
                       <Button size="sm" variant="outline">
                         <Paperclip className="w-4 h-4" />
                       </Button>
-                      <Button size="sm" className="hero-gradient text-white">
+                      <Button 
+                        size="sm" 
+                        className="hero-gradient text-white" 
+                        onClick={sendMessage}
+                        disabled={loading || !message.trim()}
+                      >
                         <Send className="w-4 h-4" />
                       </Button>
                     </div>
