@@ -152,24 +152,35 @@ export default function Biblioteca() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('🚀 useEffect executado - carregando resumos...');
     loadResumos();
   }, []);
 
   const loadResumos = async () => {
     try {
+      console.log('🔍 Iniciando carregamento de resumos...');
       setError(null);
+      
+      console.log('🔗 Fazendo chamada para Supabase...');
       const { data, error } = await supabase
         .from('resumos')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      console.log('📊 Resposta do Supabase:', { data, error });
 
+      if (error) {
+        console.error('❌ Erro do Supabase:', error);
+        throw error;
+      }
+
+      console.log('✅ Resumos carregados com sucesso:', data?.length || 0, 'items');
       setResumos(data || []);
     } catch (error: any) {
-      console.error('Erro ao carregar resumos:', error);
+      console.error('💥 Erro ao carregar resumos:', error);
       setError('Erro ao carregar dados, tente novamente');
     } finally {
+      console.log('🏁 Finalizando carregamento...');
       setLoading(false);
     }
   };
