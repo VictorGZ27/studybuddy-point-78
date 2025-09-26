@@ -5,119 +5,132 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { PenTool, Clock, Trophy, Target, Zap, BarChart3, CheckCircle, AlertCircle, Loader2, Play } from "lucide-react";
+import { PenTool, Clock, Trophy, Target, Zap, BarChart3, CheckCircle, AlertCircle, Loader2, Play, BookOpen, Calculator, History, MapPin, Languages, Palette, Users, Brain, Dna, Dumbbell, Atom, Zap as Physics } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Exercicio } from "@/types/database";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import questoesData from "@/data/questoes-ensino-medio.json";
+import { useQuizProgress } from "@/hooks/useQuizProgress";
+
+interface Questao {
+  pergunta: string;
+  alternativas: string[];
+  correta: string;
+}
+
+interface Materia {
+  nome: string;
+  questoes: Questao[];
+}
 
 interface QuizState {
   isActive: boolean;
   currentQuestion: number;
-  exercises: Exercicio[];
+  questions: Questao[];
   selectedAnswers: string[];
   score: number;
   completed: boolean;
   subject: string;
+  showCorrectAnswer: boolean;
+  answeredCurrentQuestion: boolean;
 }
 
-const materias = ["Matemática", "Português", "Redação", "História", "Física", "Química", "Biologia"];
+// Ícones para cada matéria
+const getMateriaIcon = (materia: string) => {
+  const iconMap: Record<string, any> = {
+    "Português": BookOpen,
+    "Matemática": Calculator,
+    "História": History,
+    "Geografia": MapPin,
+    "Inglês": Languages,
+    "Artes": Palette,
+    "Sociologia": Users,
+    "Filosofia": Brain,
+    "Biologia": Dna,
+    "Educação Física": Dumbbell,
+    "Química": Atom,
+    "Física": Physics
+  };
+  return iconMap[materia] || PenTool;
+};
 
 export default function Exercicios() {
   const [quiz, setQuiz] = useState<QuizState>({
     isActive: false,
     currentQuestion: 0,
-    exercises: [],
+    questions: [],
     selectedAnswers: [],
     score: 0,
     completed: false,
-    subject: ""
+    subject: "",
+    showCorrectAnswer: false,
+    answeredCurrentQuestion: false
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [exercisesBySubject, setExercisesBySubject] = useState<Record<string, Exercicio[]>>({});
+  const [materias, setMaterias] = useState<Materia[]>([]);
   const { user, profile } = useAuth();
+  const { progress, saveQuizResult, getOverallStats } = useQuizProgress();
 
   useEffect(() => {
-    loadExercises();
+    loadQuestoes();
   }, []);
 
-  const loadExercises = async () => {
+  const loadQuestoes = async () => {
     try {
       setLoading(true);
-      setError(null);
-
-      // Tenta ordenar por created_at; caso a coluna não exista, faz fallback sem ordenação
-      let dataResult: any[] | null = null;
-      const { data, error } = await supabase
-        .from('exercicios')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        if (error.code === '42703' || (error.message && error.message.includes('created_at'))) {
-          const { data: fallbackData, error: fallbackError } = await supabase
-            .from('exercicios')
-            .select('*');
-          if (fallbackError) throw fallbackError;
-          dataResult = fallbackData;
-        } else {
-          throw error;
-        }
-      } else {
-        dataResult = data;
-      }
-
-      // Agrupar exercícios por matéria
-      const grouped = (dataResult || []).reduce((acc, exercise) => {
-        const materia = exercise.materia || 'Outros';
-        if (!acc[materia]) acc[materia] = [];
-        // Converter alternativas de JSON para array de strings
-        const exerciseWithParsedAlternativas = {
-          ...exercise,
-          alternativas: Array.isArray(exercise.alternativas) 
-            ? exercise.alternativas 
-            : JSON.parse(exercise.alternativas as string)
-        };
-        acc[materia].push(exerciseWithParsedAlternativas as Exercicio);
-        return acc;
-      }, {} as Record<string, Exercicio[]>);
-
-      setExercisesBySubject(grouped);
+      // Carregar questões do arquivo JSON
+      setMaterias(questoesData.materias as Materia[]);
     } catch (error: any) {
-      console.error('Erro ao carregar exercícios:', error);
-      setError('Erro ao carregar dados, tente novamente');
+      console.error('Erro ao carregar questões:', error);
+      toast.error('Erro ao carregar questões');
     } finally {
       setLoading(false);
     }
   };
   const startQuiz = (subject: string) => {
-    const exercises = exercisesBySubject[subject] || [];
-    if (exercises.length === 0) {
-      toast.error('Não há exercícios disponíveis para esta matéria');
+    const materia = materias.find(m => m.nome === subject);
+    if (!materia || materia.questoes.length === 0) {
+      toast.error('Não há questões disponíveis para esta matéria');
       return;
     }
+
+    // Embaralhar questões e pegar 10
+    const questoesEmbaralhadas = [...materia.questoes].sort(() => Math.random() - 0.5).slice(0, 10);
 
     setQuiz({
       isActive: true,
       currentQuestion: 0,
-      exercises: exercises.slice(0, 10), // Máximo 10 questões
+      questions: questoesEmbaralhadas,
       selectedAnswers: [],
       score: 0,
       completed: false,
-      subject
+      subject,
+      showCorrectAnswer: false,
+      answeredCurrentQuestion: false
     });
   };
 
   const selectAnswer = (answer: string) => {
+    if (quiz.answeredCurrentQuestion) return;
+
     const newAnswers = [...quiz.selectedAnswers];
     newAnswers[quiz.currentQuestion] = answer;
-    setQuiz(prev => ({ ...prev, selectedAnswers: newAnswers }));
+    setQuiz(prev => ({ 
+      ...prev, 
+      selectedAnswers: newAnswers,
+      showCorrectAnswer: true,
+      answeredCurrentQuestion: true
+    }));
   };
 
   const nextQuestion = () => {
-    if (quiz.currentQuestion < quiz.exercises.length - 1) {
-      setQuiz(prev => ({ ...prev, currentQuestion: prev.currentQuestion + 1 }));
+    if (quiz.currentQuestion < quiz.questions.length - 1) {
+      setQuiz(prev => ({ 
+        ...prev, 
+        currentQuestion: prev.currentQuestion + 1,
+        showCorrectAnswer: false,
+        answeredCurrentQuestion: false
+      }));
     } else {
       finishQuiz();
     }
@@ -127,26 +140,16 @@ export default function Exercicios() {
     let correctAnswers = 0;
 
     // Calcular pontuação
-    for (let i = 0; i < quiz.exercises.length; i++) {
-      const exercise = quiz.exercises[i];
+    for (let i = 0; i < quiz.questions.length; i++) {
+      const question = quiz.questions[i];
       const userAnswer = quiz.selectedAnswers[i];
-      const isCorrect = userAnswer === exercise.resposta_correta;
+      const isCorrect = userAnswer === question.correta;
       
       if (isCorrect) correctAnswers++;
-
-      // Salvar resultado no banco
-      if (user) {
-        try {
-          await supabase.from('resultados').insert({
-            aluno_id: user.id,
-            exercicio_id: exercise.id,
-            acertou: isCorrect
-          });
-        } catch (error) {
-          console.error('Erro ao salvar resultado:', error);
-        }
-      }
     }
+
+    // Salvar progresso local
+    saveQuizResult(quiz.subject, correctAnswers, quiz.questions.length);
 
     // Atualizar pontos do usuário
     if (user && correctAnswers > 0) {
@@ -173,11 +176,13 @@ export default function Exercicios() {
     setQuiz({
       isActive: false,
       currentQuestion: 0,
-      exercises: [],
+      questions: [],
       selectedAnswers: [],
       score: 0,
       completed: false,
-      subject: ""
+      subject: "",
+      showCorrectAnswer: false,
+      answeredCurrentQuestion: false
     });
   };
 
@@ -192,26 +197,11 @@ export default function Exercicios() {
     );
   }
 
-  // Estado de erro de carregamento
-  if (error) {
-    return (
-      <div className="min-h-screen pt-20 pb-8 flex items-center justify-center">
-        <Card className="study-card max-w-md">
-          <CardContent className="p-8 text-center">
-            <AlertCircle className="h-12 w-12 text-warning mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Erro ao carregar dados, tente novamente</h3>
-            <p className="text-muted-foreground mb-4">Verifique sua conexão e tente novamente.</p>
-            <Button onClick={loadExercises} className="hero-gradient text-white">Recarregar</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   // Interface do Quiz Ativo
   if (quiz.isActive && !quiz.completed) {
-    const currentExercise = quiz.exercises[quiz.currentQuestion];
-    const progress = ((quiz.currentQuestion + 1) / quiz.exercises.length) * 100;
+    const currentQuestion = quiz.questions[quiz.currentQuestion];
+    const progress = ((quiz.currentQuestion + 1) / quiz.questions.length) * 100;
     
     return (
       <div className="min-h-screen pt-20 pb-8">
@@ -220,7 +210,7 @@ export default function Exercicios() {
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-2xl font-bold">Quiz de {quiz.subject}</h1>
               <Badge variant="outline">
-                {quiz.currentQuestion + 1} de {quiz.exercises.length}
+                {quiz.currentQuestion + 1} de {quiz.questions.length}
               </Badge>
             </div>
             <Progress value={progress} className="w-full" />
@@ -229,26 +219,47 @@ export default function Exercicios() {
           <Card className="study-card">
             <CardHeader>
               <CardTitle className="text-xl">
-                {currentExercise.pergunta}
+                {currentQuestion.pergunta}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <RadioGroup
-                value={quiz.selectedAnswers[quiz.currentQuestion] || ""}
-                onValueChange={selectAnswer}
-              >
-                {(currentExercise.alternativas as string[]).map((alternativa, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <RadioGroupItem value={alternativa} id={`option-${index}`} />
-                    <Label 
-                      htmlFor={`option-${index}`} 
-                      className="flex-1 cursor-pointer p-3 rounded-lg hover:bg-secondary"
+              <div className="space-y-3">
+                {currentQuestion.alternativas.map((alternativa, index) => {
+                  const isSelected = quiz.selectedAnswers[quiz.currentQuestion] === alternativa;
+                  const isCorrect = alternativa === currentQuestion.correta;
+                  const showFeedback = quiz.showCorrectAnswer;
+                  
+                  let buttonClass = "w-full text-left p-4 rounded-lg border transition-all duration-200 hover:bg-secondary";
+                  
+                  if (showFeedback) {
+                    if (isSelected && isCorrect) {
+                      buttonClass += " bg-green-100 border-green-500 text-green-800 dark:bg-green-900 dark:border-green-400 dark:text-green-100";
+                    } else if (isSelected && !isCorrect) {
+                      buttonClass += " bg-red-100 border-red-500 text-red-800 dark:bg-red-900 dark:border-red-400 dark:text-red-100";
+                    } else if (!isSelected && isCorrect) {
+                      buttonClass += " bg-green-50 border-green-300 text-green-700 dark:bg-green-900/50 dark:border-green-500 dark:text-green-200";
+                    }
+                  } else if (isSelected) {
+                    buttonClass += " bg-primary/10 border-primary";
+                  }
+
+                  return (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      className={buttonClass}
+                      onClick={() => selectAnswer(alternativa)}
+                      disabled={quiz.showCorrectAnswer}
                     >
-                      {alternativa}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
+                      <div className="flex items-center justify-between w-full">
+                        <span>{alternativa}</span>
+                        {showFeedback && isCorrect && <CheckCircle className="h-5 w-5 text-green-600" />}
+                        {showFeedback && isSelected && !isCorrect && <AlertCircle className="h-5 w-5 text-red-600" />}
+                      </div>
+                    </Button>
+                  );
+                })}
+              </div>
 
               <div className="flex justify-between pt-4">
                 <Button 
@@ -259,10 +270,10 @@ export default function Exercicios() {
                 </Button>
                 <Button 
                   onClick={nextQuestion}
-                  disabled={!quiz.selectedAnswers[quiz.currentQuestion]}
+                  disabled={!quiz.answeredCurrentQuestion}
                   className="hero-gradient text-white"
                 >
-                  {quiz.currentQuestion < quiz.exercises.length - 1 ? 'Próxima' : 'Finalizar'}
+                  {quiz.currentQuestion < quiz.questions.length - 1 ? 'Próxima' : 'Finalizar'}
                 </Button>
               </div>
             </CardContent>
@@ -274,7 +285,7 @@ export default function Exercicios() {
 
   // Resultado do Quiz
   if (quiz.completed) {
-    const percentage = Math.round((quiz.score / quiz.exercises.length) * 100);
+    const percentage = Math.round((quiz.score / quiz.questions.length) * 100);
     
     return (
       <div className="min-h-screen pt-20 pb-8">
@@ -291,7 +302,7 @@ export default function Exercicios() {
                   {percentage >= 70 ? 'Parabéns!' : 'Continue tentando!'}
                 </h1>
                 <p className="text-muted-foreground">
-                  Você acertou {quiz.score} de {quiz.exercises.length} questões
+                  Você acertou {quiz.score} de {quiz.questions.length} questões
                 </p>
               </div>
 
@@ -358,15 +369,15 @@ export default function Exercicios() {
             <Card className="study-card text-center">
               <CardContent className="p-6">
                 <Target className="h-12 w-12 text-primary mx-auto mb-4" />
-                <div className="text-3xl font-bold text-primary">-</div>
+                <div className="text-3xl font-bold text-primary">{getOverallStats().totalQuizzes}</div>
                 <div className="text-muted-foreground">Exercícios feitos</div>
               </CardContent>
             </Card>
             <Card className="study-card text-center">
               <CardContent className="p-6">
                 <BarChart3 className="h-12 w-12 text-primary mx-auto mb-4" />
-                <div className="text-3xl font-bold text-primary">-</div>
-                <div className="text-muted-foreground">Taxa de acerto</div>
+                <div className="text-3xl font-bold text-primary">{getOverallStats().averageScore}%</div>
+                <div className="text-muted-foreground">Taxa de acerto média</div>
               </CardContent>
             </Card>
           </div>
@@ -378,50 +389,70 @@ export default function Exercicios() {
             Escolha uma <span className="text-gradient">matéria</span>
           </h2>
           
-          {Object.keys(exercisesBySubject).length === 0 ? (
+          {materias.length === 0 ? (
             <Card className="p-8 text-center">
               <CardContent>
                 <PenTool className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Nenhum exercício disponível no momento.</h3>
+                <h3 className="text-lg font-semibold mb-2">Carregando questões...</h3>
                 <p className="text-muted-foreground">
-                  Ainda não há exercícios cadastrados no sistema
+                  Aguarde enquanto carregamos as questões do Ensino Médio
                 </p>
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(exercisesBySubject).map(([materia, exercises], index) => (
-                <Card key={materia} className="study-card group cursor-pointer animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <CardHeader className="text-center pb-4">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <PenTool className="w-8 h-8 text-primary" />
-                    </div>
-                    <CardTitle className="text-xl mb-2">{materia}</CardTitle>
-                    <Badge variant="secondary" className="w-fit mx-auto">
-                      {exercises.length} questões
-                    </Badge>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="text-center space-y-2">
-                      <div className="flex items-center justify-center text-sm text-muted-foreground">
-                        <Clock className="w-4 h-4 mr-1" />
-                        ~{Math.min(exercises.length * 2, 20)} min
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {materias.map((materia, index) => {
+                const IconComponent = getMateriaIcon(materia.nome);
+                const materiaProgress = progress[materia.nome];
+                const hasProgress = materiaProgress && materiaProgress.totalAttempts > 0;
+                const bestPercentage = hasProgress ? Math.round((materiaProgress.bestScore / materiaProgress.totalQuestions) * 100) : 0;
+                
+                return (
+                  <Card key={materia.nome} className="study-card group cursor-pointer animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <CardHeader className="text-center pb-4">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="w-8 h-8 text-primary" />
                       </div>
-                      <div className="flex items-center justify-center text-sm text-muted-foreground">
-                        <Target className="w-4 h-4 mr-1" />
-                        {exercises.length} questões
+                      <CardTitle className="text-lg mb-2">{materia.nome}</CardTitle>
+                      <div className="flex gap-2 justify-center">
+                        <Badge variant="secondary" className="text-xs">
+                          {materia.questoes.length} questões
+                        </Badge>
+                        {hasProgress && (
+                          <Badge variant={bestPercentage >= 70 ? "default" : "destructive"} className="text-xs">
+                            Melhor: {bestPercentage}%
+                          </Badge>
+                        )}
                       </div>
-                    </div>
-                    <Button 
-                      className="w-full group-hover:hero-gradient group-hover:text-white transition-all duration-300"
-                      onClick={() => startQuiz(materia)}
-                    >
-                      <Play className="w-4 h-4 mr-2" />
-                      Iniciar Quiz
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="text-center space-y-2">
+                        <div className="flex items-center justify-center text-sm text-muted-foreground">
+                          <Clock className="w-4 h-4 mr-1" />
+                          ~20 min
+                        </div>
+                        <div className="flex items-center justify-center text-sm text-muted-foreground">
+                          <Target className="w-4 h-4 mr-1" />
+                          10 questões
+                        </div>
+                        {hasProgress && (
+                          <div className="flex items-center justify-center text-sm text-muted-foreground">
+                            <Play className="w-4 h-4 mr-1" />
+                            {materiaProgress.totalAttempts} tentativas
+                          </div>
+                        )}
+                      </div>
+                      <Button 
+                        className="w-full group-hover:hero-gradient group-hover:text-white transition-all duration-300"
+                        onClick={() => startQuiz(materia.nome)}
+                      >
+                        <Play className="w-4 h-4 mr-2" />
+                        {hasProgress ? 'Jogar Novamente' : 'Iniciar Quiz'}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>
