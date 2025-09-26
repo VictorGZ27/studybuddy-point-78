@@ -113,8 +113,11 @@ export default function Exercicios() {
   const selectAnswer = (answer: string) => {
     if (quiz.answeredCurrentQuestion) return;
 
+    // Extract just the letter (A, B, C, D) from the full alternative text
+    const selectedLetter = answer.charAt(0);
+    
     const newAnswers = [...quiz.selectedAnswers];
-    newAnswers[quiz.currentQuestion] = answer;
+    newAnswers[quiz.currentQuestion] = selectedLetter;
     setQuiz(prev => ({ 
       ...prev, 
       selectedAnswers: newAnswers,
@@ -225,8 +228,9 @@ export default function Exercicios() {
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 {currentQuestion.alternativas.map((alternativa, index) => {
-                  const isSelected = quiz.selectedAnswers[quiz.currentQuestion] === alternativa;
-                  const isCorrect = alternativa === currentQuestion.correta;
+                  const alternativaLetter = alternativa.charAt(0);
+                  const isSelected = quiz.selectedAnswers[quiz.currentQuestion] === alternativaLetter;
+                  const isCorrect = alternativaLetter === currentQuestion.correta;
                   const showFeedback = quiz.showCorrectAnswer;
                   
                   let buttonClass = "w-full text-left p-4 rounded-lg border transition-all duration-200 hover:bg-secondary";
