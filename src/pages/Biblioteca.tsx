@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Calculator, Book, Globe, Microscope, Languages, MapPin, Search, Download, Star, Clock, Loader2, Target } from "lucide-react";
+import { Calculator, Book, Globe, Microscope, Languages, MapPin, Search, Download, Star, Clock, Loader2, Target, Lock, Crown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Resumo } from "@/types/database";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const subjects = [
   {
@@ -149,7 +151,11 @@ export default function Biblioteca() {
   const [resumos, setResumos] = useState<Resumo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [viewedResumos, setViewedResumos] = useState<string[]>([]);
+  const [showPremiumDialog, setShowPremiumDialog] = useState(false);
   const navigate = useNavigate();
+  const { isPremium } = useAuth();
+  const resumosRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     console.log('🚀 useEffect executado - carregando resumos...');
@@ -223,6 +229,14 @@ export default function Biblioteca() {
       console.log('✅ Resumos filtrados carregados:', data?.length || 0, 'items');
       setResumos(data || []);
       setSelectedSubject(materia);
+      
+      // Auto-scroll to resumos section
+      setTimeout(() => {
+        resumosRef.current?.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
     } catch (error: any) {
       console.error('💥 Erro ao carregar resumos filtrados:', error);
       setError('Erro ao carregar dados, tente novamente');
@@ -230,6 +244,39 @@ export default function Biblioteca() {
       console.log('🏁 Finalizando carregamento filtrado...');
       setLoading(false);
     }
+  };
+
+  const canViewResumo = (resumoId: string, materia: string): boolean => {
+    if (isPremium) return true;
+    
+    const materiaViewedCount = viewedResumos.filter(id => {
+      const resumo = resumos.find(r => r.id === id);
+      return resumo?.materia === materia;
+    }).length;
+    
+    return materiaViewedCount < 2;
+  };
+
+  const handleResumoClick = (resumo: Resumo) => {
+    if (canViewResumo(resumo.id, resumo.materia || '')) {
+      if (!viewedResumos.includes(resumo.id)) {
+        setViewedResumos(prev => [...prev, resumo.id]);
+      }
+      navigate(`/resumo/${resumo.id}`);
+    } else {
+      setShowPremiumDialog(true);
+    }
+  };
+
+  const getDisplayedResumos = () => {
+    if (!selectedSubject) return filteredResumos;
+    
+    const subjectResumos = filteredResumos.filter(r => r.materia === selectedSubject);
+    return subjectResumos;
+  };
+
+  const getPreviewResumos = (materia: string) => {
+    return resumos.filter(r => r.materia === materia).slice(0, 2);
   };
 
   const resetFilter = () => {
@@ -315,6 +362,7 @@ export default function Biblioteca() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {filteredSubjects.map((subject, index) => {
             const Icon = subject.icon;
+            const previewResumos = getPreviewResumos(subject.name);
             return (
               <Card key={subject.name} className="study-card group cursor-pointer animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
                 <CardHeader className="text-center pb-4">
@@ -323,7 +371,7 @@ export default function Biblioteca() {
                   </div>
                   <CardTitle className="text-xl mb-2">{subject.name}</CardTitle>
                   <Badge variant="secondary" className="w-fit mx-auto">
-                    {subject.resumos} resumos
+                    {resumos.filter(r => r.materia === subject.name).length} resumos
                   </Badge>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -342,6 +390,34 @@ export default function Biblioteca() {
                       )}
                     </div>
                   </div>
+                  
+                  {/* Preview de 2 resumos */}
+                  {previewResumos.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">Resumos disponíveis:</p>
+                      {previewResumos.map((resumo) => (
+                        <div 
+                          key={resumo.id} 
+                          className="p-2 bg-background/50 rounded text-xs cursor-pointer hover:bg-background transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleResumoClick(resumo);
+                          }}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium truncate">{resumo.titulo}</span>
+                            {!isPremium && viewedResumos.filter(id => {
+                              const r = resumos.find(res => res.id === id);
+                              return r?.materia === subject.name;
+                            }).length >= 2 && !canViewResumo(resumo.id, subject.name) && (
+                              <Lock className="w-3 h-3 text-orange-500" />
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
                   <Button 
                     variant="outline" 
                     className="w-full group-hover:hero-gradient group-hover:text-white transition-all duration-300"
@@ -356,7 +432,7 @@ export default function Biblioteca() {
         </div>
 
         {/* Resumos */}
-        <div className="mb-12">
+        <div ref={resumosRef} className="mb-12">
           <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             {selectedSubject ? `Resumos de ${selectedSubject}` : 'Resumos disponíveis'}
           </h2>
@@ -409,10 +485,19 @@ export default function Biblioteca() {
                         size="sm" 
                         variant="outline" 
                         className="group-hover:hero-gradient group-hover:text-white w-full"
-                        onClick={() => navigate(`/resumo/${resumo.id}`)}
+                        onClick={() => handleResumoClick(resumo)}
                       >
-                        <Book className="w-4 h-4 mr-1" />
-                        Ler resumo
+                        {canViewResumo(resumo.id, resumo.materia || '') ? (
+                          <>
+                            <Book className="w-4 h-4 mr-1" />
+                            Ler resumo
+                          </>
+                        ) : (
+                          <>
+                            <Lock className="w-4 h-4 mr-1" />
+                            Premium
+                          </>
+                        )}
                       </Button>
                     </div>
                   </CardContent>
@@ -437,6 +522,50 @@ export default function Biblioteca() {
             </Button>
           </CardContent>
         </Card>
+
+        {/* Premium Access Dialog */}
+        {showPremiumDialog && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="max-w-md w-full">
+              <CardHeader className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl mb-4 mx-auto">
+                  <Crown className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl mb-2">Acesso Premium Necessário</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center space-y-4">
+                <p className="text-muted-foreground">
+                  Você já visualizou 2 resumos gratuitos desta disciplina. 
+                  Seja Premium para desbloquear todos os resumos!
+                </p>
+                <Alert>
+                  <Crown className="h-4 w-4" />
+                  <AlertDescription>
+                    Com o plano Premium você terá acesso ilimitado a todos os resumos de todas as disciplinas.
+                  </AlertDescription>
+                </Alert>
+                <div className="flex gap-3">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => setShowPremiumDialog(false)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button 
+                    className="flex-1 hero-gradient text-white"
+                    onClick={() => {
+                      setShowPremiumDialog(false);
+                      navigate('/planos');
+                    }}
+                  >
+                    Seja Premium
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
