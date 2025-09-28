@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_conversations: {
+        Row: {
+          aluno_id: string
+          created_at: string | null
+          id: string
+          tipo: string
+          titulo: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          aluno_id: string
+          created_at?: string | null
+          id?: string
+          tipo?: string
+          titulo?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          aluno_id?: string
+          created_at?: string | null
+          id?: string
+          tipo?: string
+          titulo?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      ai_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          role?: string
+        }
+        Relationships: []
+      }
       chat: {
         Row: {
           aluno_id: string
@@ -135,6 +186,72 @@ export type Database = {
           nome?: string | null
           pontos?: number | null
           tipo_usuario?: string | null
+        }
+        Relationships: []
+      }
+      progresso_aluno: {
+        Row: {
+          aluno_id: string
+          id: string
+          tipo: string
+          updated_at: string | null
+          valor: number | null
+        }
+        Insert: {
+          aluno_id: string
+          id?: string
+          tipo: string
+          updated_at?: string | null
+          valor?: number | null
+        }
+        Update: {
+          aluno_id?: string
+          id?: string
+          tipo?: string
+          updated_at?: string | null
+          valor?: number | null
+        }
+        Relationships: []
+      }
+      redacoes: {
+        Row: {
+          aluno_id: string
+          conteudo: string
+          created_at: string | null
+          feedback: string | null
+          id: string
+          nota: number | null
+          status: string | null
+          tema: string | null
+          tipo_correcao: string | null
+          titulo: string
+          updated_at: string | null
+        }
+        Insert: {
+          aluno_id: string
+          conteudo: string
+          created_at?: string | null
+          feedback?: string | null
+          id?: string
+          nota?: number | null
+          status?: string | null
+          tema?: string | null
+          tipo_correcao?: string | null
+          titulo: string
+          updated_at?: string | null
+        }
+        Update: {
+          aluno_id?: string
+          conteudo?: string
+          created_at?: string | null
+          feedback?: string | null
+          id?: string
+          nota?: number | null
+          status?: string | null
+          tema?: string | null
+          tipo_correcao?: string | null
+          titulo?: string
+          updated_at?: string | null
         }
         Relationships: []
       }

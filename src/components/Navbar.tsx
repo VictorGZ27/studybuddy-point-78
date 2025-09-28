@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { BookOpen, Play, PenTool, MessageCircle, User, LogOut, Crown, Trophy, CreditCard } from "lucide-react";
-import logoStudyPoint from "@/assets/logo-studypoint.png";
+import logoStudyPoint from "@/assets/logo-studypoint-new.png";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
